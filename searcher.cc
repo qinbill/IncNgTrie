@@ -7,10 +7,7 @@
 #include "dataset.h"
 #include "resultset.h"
 #include "searcher_base.h"
-#include "direct_searcher.h"
 #include "fastss_searcher.h"
-#include "pivot_searcher.h"
-#include "naive_searcher.h"
 #include "easy_timer.h"
 #include "map_trie.h"
 #include "vector_trie.h"
@@ -20,6 +17,7 @@
 #include <unordered_set>
 #include <vector>
 #include <string>
+#include <getopt.h>
 
 using namespace std;
 using namespace dbwsim;
@@ -41,9 +39,6 @@ void print_usage(){
   fprintf(stderr, "usage: -t <Max Edit Distance>\n");
   fprintf(stderr, "       -a <Algorithm,  fastss default >\n");
   fprintf(stderr, "          fastss is using fastss algorithm \n");
-  fprintf(stderr, "          direct is using direct trie algorithm \n");
-  fprintf(stderr, "          pivot  is using pivot  algorithm \n");
-  fprintf(stderr, "          naive  is using naive loog algorithm \n");
   fprintf(stderr, "       -d <Data File>\n");
   fprintf(stderr, "       -c <Trie Type, MapTrie Default>\n");
   fprintf(stderr, "          map    is using MapTrie \n");
@@ -234,33 +229,6 @@ int main(int argc, char* argv[])
     FastSSSearcher *fsssearcher = new FastSSSearcher();
     fsssearcher -> Initialize(fastss_index, active_pool, max_tau, false);
     searcher = fsssearcher;
-  } else if (strcmp(algo, "direct") == 0) {
-    indexing_timer.Start();
-    fastss_index = new FastssIndex();
-    fastss_index -> Initilization(data_input, 0, false, 0, indextrie);       
-    indexing_timer.Finish();
-    active_pool = new ActiveNodePool();
-    DirectSearcher *drctsearcher = new DirectSearcher();
-    drctsearcher -> Initialize(fastss_index, active_pool, max_tau, false);
-    searcher = drctsearcher;
-  } else if (strcmp(algo, "pivot") == 0) {
-    indexing_timer.Start();
-    fastss_index = new FastssIndex();
-    fastss_index -> Initilization(data_input, 0, false, 0, indextrie);       
-    indexing_timer.Finish();
-    active_pool = new ActiveNodePool();
-    PivotSearcher *psearcher = new PivotSearcher();
-    psearcher -> Initialize(fastss_index, active_pool, max_tau, false);
-    searcher = psearcher;
-  }else if (strcmp(algo, "naive") == 0) {
-    indexing_timer.Start();
-    fastss_index = new FastssIndex();
-    fastss_index -> Initilization(data_input, 0, false, 0, indextrie);
-    indexing_timer.Finish();
-    active_pool = new ActiveNodePool();
-    NaiveSearcher *psearcher = new NaiveSearcher();
-    psearcher -> Initialize(fastss_index, active_pool, max_tau, false);
-    searcher = psearcher;
   } else {    
     cerr << "Need correct algorithm name" <<endl;
     print_usage();

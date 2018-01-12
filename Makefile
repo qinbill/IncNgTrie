@@ -13,7 +13,7 @@ OBJS    := ${SRCS:.cc=.o}
 
 CCFLAGS = ${OPT} -Wall -std=c++0x -Wno-deprecated -ggdb -D${PROD} ${DEFINES} -DVERSION=${VERSION} 
 LDFLAGS = ${OPT} -ggdb -std=c++0x ${LIBS}
-LIBS    = -lcrypto
+LIBS    = -L/usr/lib -lssl -lcrypto
 CC	= g++
 
 
@@ -21,8 +21,7 @@ CC	= g++
 all:: ${TARGETS} 
 
 searcher: searcher.o fastssindex.o variants.o dataset.o fastss_searcher.o active_node.o searcher_base.o easy_timer.o util.o map_trie.o trie_base.o vector_trie.o brother_trie.o
-	${CC} ${LDFLAGS} -o $@ $^
-
+	${CC} -o $@ $^ ${LDFLAGS}
 
 ${OBJS}: %.o: %.cc
 	${CC} ${CCFLAGS} -o $@ -c $< 
