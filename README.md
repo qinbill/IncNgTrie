@@ -68,9 +68,9 @@ usage: -t <Max Edit Distance>
 Version: 0.0.1.0_PROD
 ```
 
-To run the test, you need query file and data file. both file are text files that contains strings per line. the current version is not optimized for strings too long. For best performance, please keep the string length within 15 chracters. 
+To run the test, you need query file and data file. both file are text files that contains strings per line. the current version is not optimized for strings too long. For best performance, please keep the string length within 15 characters. 
 
-An exmample:
+A simple example:
 ```
 $ ./searcher -t 3 -a fastss -d data_file.txt -c map < inputfile.txt
 
